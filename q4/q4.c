@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include<string.h>
 #include <dlfcn.h>
 
 typedef int (*fptr)(int,int);
@@ -8,10 +9,13 @@ int main() {
     int a,b;
 
     while(scanf("%s %d %d",str,&a,&b)==3) {
-        void* handle=dlopen("./libadd.so",RTLD_LAZY);
+        char lib[50]={0};
+        sprintf(lib,"./lib%s.so",str);
+        void* handle=dlopen(lib,RTLD_LAZY);
         fptr func=dlsym(handle,str);
         int ans=func(a,b);
         printf("%d\n",ans);
+        dlclose(handle);
     }
 
     return 0;
