@@ -38,6 +38,83 @@ main:
     li s1, 0
     addi s2, a0, -1
 
+
+    blt s2, x0, loop
+    
+    mv a0, s0
+    mv a1, s2
+    li a2, 0
+    call fseek
+    
+    mv a0, s0
+    call fgetc
+    li t0, '\n'
+    bne a0, t0, loop
+    addi s2, s2, -1
+
+
+    # s3 = char at s1
+    # s4 = char at s2
+
+    loop:
+        bge s1, s2, True
+
+        mv a0, s0
+        mv a1, s1
+        li a2, 0
+        call fseek
+        
+        mv a0, s0
+        call fgetc
+        mv s3, a0
+        
+
+
+        mv a0, s0
+        mv a1, s2
+        li a2, 0
+        call fseek
+        
+        mv a0, s0
+        call fgetc
+        mv s4, a0
+
+        bne s3, s4, False
+
+        addi s1, s1, 1
+        addi s2, s2, -1
+        
+        jal x0, loop
+
+
+    True:
+        la a0, yes
+        call printf
+        jal x0, Exit
+
+    False:
+        la a0, no
+        call printf
+        jal x0, Exit
+
+    Exit:
+        mv a0, s0
+        call fclose
+
+        ld ra, 40(sp)
+        ld s0, 32(sp)
+        ld s1, 24(sp)
+        ld s2, 16(sp)
+        ld s3, 8(sp)
+        ld s4, 0(sp)
+        addi sp, sp, 48
+        
+        li a0, 0
+        ret
+
+    li s1, 0
+    addi s2, a0, -1
+
     # s3 = char at s1
     # s4 = char at s2
 
