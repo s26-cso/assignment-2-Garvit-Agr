@@ -12,7 +12,13 @@ int main() {
         char lib[50]={0};
         sprintf(lib,"./lib%s.so",str);
         void* handle=dlopen(lib,RTLD_LAZY);
+
+        if(handle==NULL) continue;
+        
         fptr func=dlsym(handle,str);
+
+        if(func==NULL) continue;
+        
         int ans=func(a,b);
         printf("%d\n",ans);
         dlclose(handle);
